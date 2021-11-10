@@ -1,28 +1,108 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
+
 
 public class GameManager : MonoBehaviour
 {
     public int level;
-    public bool canPlay;
+    private int money;
+    public GameObject[] levelPrefab;
+    public Transform mapSpawnPos;
+    public Transform playerSpawnPos;
+    private UIHandler ui;
+    private PlayerHandler player;
+    private CameraFollower camera;
+    
+    
+    
+    /*
     public Transform groundHolderTransform;
     public GameObject groundPart;
     public GameObject ballPrefab;
     public int maxBallCount;
     public int maxObstacleCount;
     public List<int> selectedGroundIndexes = new List<int>();
+    */
     
 
     private void Start()
     {
-        CreatePath();
-        CreateBalls();
+      //  CreatePath();
+      //  CreateBalls();
+      ui = FindObjectOfType<UIHandler>();
+      player = FindObjectOfType<PlayerHandler>();
+      camera = FindObjectOfType<CameraFollower>();
+      ui.Splash();
+      ui.UpdateLevelText(level);
+      ui.UpdateMoneyText(money);
+      CreateMap();
     }
 
+    public void CreateMap()
+    {
+        if (GameObject.FindGameObjectWithTag("Map"))
+        {
+            Destroy(GameObject.FindGameObjectWithTag("Map"));
+        }
+        
+        int i = UnityEngine.Random.Range(0, levelPrefab.Length);
+        GameObject map = Instantiate(levelPrefab[i].gameObject, mapSpawnPos.position, Quaternion.identity);
+
+    }
+
+
+    public void StartTheGame()
+    {
+        ui.InGame();
+        player.StartPlayer();
+       
+    }
     
-     void CreatePath()
+    public void SetGame()
+    {
+        ui.Splash();
+        camera.gameObject.transform.position = playerSpawnPos.position;
+        camera.SetPlayer();
+        player.transform.position = playerSpawnPos.position;
+        CreateMap();
+    }
+    
+    public void MissionComplete()
+    {
+        ui.LevelPass();
+        player.canMove = false;
+        LevelUp();
+    }
+
+    public void MissionFailed()
+    {
+        ui.LevelFail(); 
+        player.canMove = false;
+    }
+
+    public void AddMoney(int value)
+    {
+        money += value;
+        ui.UpdateMoneyText(money);
+    }
+
+    public void LevelUp()
+    {
+        level++;
+        ui.UpdateLevelText(level);
+    }
+
+    public void GameFinish()
+    {
+        camera.SetFinishLine(GameObject.FindGameObjectWithTag("CameraFinish").gameObject.transform);
+        Invoke("MissionComplete",1);
+    }
+    
+     /*void CreatePath()
     {
         int pathCount = UnityEngine.Random.Range(level + 15, level + 20);
         int nextPath = 0;
@@ -55,5 +135,5 @@ public class GameManager : MonoBehaviour
              groundParts[index].GetComponent<GroundPartHandler>().SpawnBalls(ballPrefab,ballCountInOneGround);
          }
          
-     }
+     }*/
 }

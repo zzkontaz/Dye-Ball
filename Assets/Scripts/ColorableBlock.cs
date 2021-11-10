@@ -33,6 +33,7 @@ public class ColorableBlock : MonoBehaviour
    {
        canBeHit = false;
        renderer.material.SetColor("_Color",matColor);
+   
        // Para kazanacağız
    }
     

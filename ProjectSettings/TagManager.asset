@@ -8,6 +8,9 @@ TagManager:
   - Ball
   - Obstacle
   - Cannon
+  - Wall
+  - Map
+  - CameraFinish
   layers:
   - Default
   - TransparentFX

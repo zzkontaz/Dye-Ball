@@ -35,7 +35,7 @@ public class BallHandler : MonoBehaviour
 
     void PlayerStackedThisBall()
     {
-        if (!isStacked)
+        if (!isStacked && !isFired)
         {
             isStacked = true;
             player.AddBallToStackList(gameObject);
@@ -56,7 +56,9 @@ public class BallHandler : MonoBehaviour
     void HandleStacked()
     {
          
-        float x = Mathf.Lerp(transform.position.x, player.StackTransform.position.x, Mathf.Abs(ballOrder - player.stackedBalls.Count -1 ) * 2.5f * Time.deltaTime);
+        
+        float x = Mathf.Lerp(transform.position.x, player.StackTransform.position.x, Mathf.Abs(ballOrder - player.stackedBalls.Count -1 ) * 4f * Time.deltaTime);
+       
         Vector3 pos = new Vector3(x,1,player.StackTransform.position.z + ballOrder + 1.5f);
         transform.position = pos;
     }
@@ -81,7 +83,12 @@ public class BallHandler : MonoBehaviour
 
         if (other.CompareTag("Obstacle"))
         {
+            if(other.GetComponent<ColorableBlock>() != null)
             other.GetComponent<ColorableBlock>().GotHitByBall(colors[colorIndex]);
+            
+            if(other.GetComponent<ColorableHuman>() != null)
+                other.GetComponent<ColorableHuman>().GotHitByBall(colors[colorIndex]);
+            
             player.stackedBalls.Remove(gameObject);
             Destroy(gameObject);
         }
@@ -91,9 +98,14 @@ public class BallHandler : MonoBehaviour
             other.GetComponent<Cannon>().FireBall(gameObject);
             if (other.GetComponent<Cannon>().maxShotCount > 0)
             {
-                player.stackedBalls.Remove(gameObject);
+              //  player.stackedBalls.Remove(gameObject);
             }
-            
+        }
+
+        if (other.CompareTag("Wall"))
+        {
+            player.stackedBalls.Remove(gameObject);
+            Destroy(gameObject);
         }
         
     }
