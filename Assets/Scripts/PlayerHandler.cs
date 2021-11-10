@@ -12,15 +12,21 @@ public class PlayerHandler : MonoBehaviour
    public Transform StackTransform;
    public List<GameObject> stackedBalls = new List<GameObject>();
    private bool isNavigatingToFinish = false;
+   private Transform localTrans;
+   private Vector3 lastMousePos;
+   private Vector3 mousePos;
+   private Vector3 newTransPos;
+
    [Header("Componentler")] 
    private Animator anim;
-
    private GameManager manager;
+   
 
    private void Start()
    {
       anim = GetComponent<Animator>();
       manager = FindObjectOfType<GameManager>();
+      localTrans = GetComponent<Transform>();
 
    }
 
@@ -59,15 +65,23 @@ public class PlayerHandler : MonoBehaviour
    {
       transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
-      if (Input.GetMouseButton(0) && !isNavigatingToFinish)
+      if (Input.GetMouseButton(0) && !isNavigatingToFinish) // YENİ HAREKET SİSTEMİ İLE EKRANDA DOKUNULAN YERE DAHA İYİ ULAŞIYORUZ
       {
-         Vector3 pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, transform.position.y,
-            transform.position.z));
-         pos.x= Mathf.Clamp(pos.x, -3, 3f);
-         Vector3  nextPos =   new Vector3(pos.x, transform.position.y, transform.position.z);
-         transform.position = Vector3.Lerp(transform.position,nextPos, 3* Time.deltaTime); 
-      }
+         mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+            10f));
+         
+         float xDifference = mousePos.x - transform.position.x;
+         
+         newTransPos.x = transform.position.x + xDifference * Time.deltaTime * 10;
+         newTransPos.y = transform.position.y;
+         newTransPos.z = transform.position.z;
+         newTransPos.x = Mathf.Clamp(newTransPos.x, -3, 3);
+         Vector3 truePos = new Vector3(newTransPos.x,transform.position.y,transform.position.z);
+         transform.position = truePos;
+         lastMousePos = mousePos;
 
+      }
+      
       if (isNavigatingToFinish)
       {
          Vector3  nextPos =   new Vector3(0, transform.position.y, transform.position.z);
@@ -75,6 +89,14 @@ public class PlayerHandler : MonoBehaviour
       }
    }
 
+   public void UpdateBallOrder()
+   {
+      for (int i = 0; i < stackedBalls.Count; i++) // TOPLAR ÖZELİNDE DEĞİŞİKLİK GERÇEKLEŞTİĞİ ZAMAN LİSTEMİZİ GÜNCELLİYORUZ
+      {
+         stackedBalls[i].GetComponent<BallHandler>().ballOrder = i;
+      }
+   }
+   
    public void AddBallToStackList(GameObject ball)
    {
       stackedBalls.Add(ball);
@@ -95,7 +117,7 @@ public class PlayerHandler : MonoBehaviour
 
    void CheckFail()
    {
-      if (stackedBalls.Count == 0)
+      if (stackedBalls.Count == 0 && !isNavigatingToFinish)
       {
         Death();
       }

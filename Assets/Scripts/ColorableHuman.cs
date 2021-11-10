@@ -5,9 +5,11 @@ using UnityEngine;
 public class ColorableHuman : MonoBehaviour
 {
     public int maxColorCount;
-    private bool canBeHit;
+    public bool canBeHit;
     public SkinnedMeshRenderer[] renderer;
     private GameManager manager;
+    public bool isFinalTarget;
+    public int finalOrder;
     
     private void Start()
     {
@@ -30,12 +32,13 @@ public class ColorableHuman : MonoBehaviour
     void ObjectGotColored(Color matColor)
     {
         canBeHit = false;
+        GetComponent<BoxCollider>().enabled = false;
         for (int i = 0; i < renderer.Length; i++)
         {
             renderer[i].material.SetColor("_Color",matColor);
         }
         gameObject.GetComponent<RagdollOnOff>().SetKinematic(false);
         manager.AddMoney(5);
-        // Para kazanacağız
+      
     }
 }

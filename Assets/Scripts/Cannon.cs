@@ -25,7 +25,6 @@ public class Cannon : MonoBehaviour
             text.text = maxShotCount.ToString();
             ballObj.transform.position = shotPoint.position;
             ballObj.GetComponent<BallHandler>().FireTheBall();
-
         }
         else
         {

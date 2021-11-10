@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private UIHandler ui;
     private PlayerHandler player;
     private CameraFollower camera;
+    public GameObject[] finalHumans;
     
     
     
@@ -48,10 +49,34 @@ public class GameManager : MonoBehaviour
         {
             Destroy(GameObject.FindGameObjectWithTag("Map"));
         }
-        
         int i = UnityEngine.Random.Range(0, levelPrefab.Length);
         GameObject map = Instantiate(levelPrefab[i].gameObject, mapSpawnPos.position, Quaternion.identity);
+        FindFinalHumans();
 
+    }
+
+    void FindFinalHumans() // OYUN SAHNESİ YENİDEN OLUŞTURULDUĞU ESNADA FİNAL KONUMUNDAKİ İNSANLARI LİSTEYE TANITIYORUZ
+    {
+        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+        for (int i = 0; i < obstacles.Length; i++)
+        {
+            if (obstacles[i].GetComponent<ColorableHuman>() != null &&
+                obstacles[i].GetComponent<ColorableHuman>().isFinalTarget )
+            {
+                finalHumans[obstacles[i].GetComponent<ColorableHuman>().finalOrder] = (obstacles[i].gameObject);
+            }
+        }
+    }
+    public void SetFinalTargetForCannon(GameObject firedBall) // FİNAL KONUMUNDAKİ İNSAN DAHA ÖNCE VURULMADIYSA TOPUMUZUN HEDEFİ OLUYOR 
+    {
+        for (int i = 0; i < finalHumans.Length; i++)
+        {
+            if (finalHumans[i].GetComponent<ColorableHuman>().canBeHit)
+            {
+                firedBall.gameObject.GetComponent<Transform>().LookAt(finalHumans[i].transform);
+                break;
+            }
+        }
     }
 
 

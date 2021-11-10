@@ -6,7 +6,6 @@
     <e p="C:\Users\hamza\Dye Ball" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="ColorableHuman.cs" t="Include" />
         <e p="ColorSkies" t="Include">
           <e p="Demo" t="Include">
             <e p="Scripts" t="Include">
@@ -15,17 +14,18 @@
             </e>
           </e>
         </e>
-        <e p="RagdollOnOff.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="BallHandler.cs" t="Include" />
           <e p="CameraFollower.cs" t="Include" />
           <e p="Cannon.cs" t="Include" />
           <e p="ColorableBlock.cs" t="Include" />
+          <e p="ColorableHuman.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="GroundPartHandler.cs" t="Include" />
           <e p="PlayerHandler.cs" t="Include" />
+          <e p="RagdollOnOff.cs" t="Include" />
+          <e p="UIHandler.cs" t="Include" />
         </e>
-        <e p="UIHandler.cs" t="Include" />
       </e>
       <e p="Dye Ball.sln" t="IncludeFlat" />
       <e p="obj" t="ExcludeRecursive" />

@@ -7,8 +7,7 @@ public class ColorableBlock : MonoBehaviour
 {
 
     public int maxColorCount;
-    private bool canBeHit;
-   
+    public bool canBeHit;
     private MeshRenderer renderer;
     
     private void Start()

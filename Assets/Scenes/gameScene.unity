@@ -266,6 +266,13 @@ MonoBehaviour:
   - {fileID: 4146073023930310282, guid: cc7192df67ac7ab4098c1c9114beb16a, type: 3}
   mapSpawnPos: {fileID: 2022101892}
   playerSpawnPos: {fileID: 262003121}
+  finalHumans:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &302256380
 Transform:
   m_ObjectHideFlags: 0
